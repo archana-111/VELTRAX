@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VELTRAX documentation</title>
+  <style>
+    :root { color-scheme: light; --ink: #20272d; --muted: #5c666d; --line: #dce0e1; --paper: #f5f4ef; --navy: #101d29; --signal: #b8431a; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 18px/1.55 "Segoe UI", sans-serif; color: var(--ink); background: var(--paper); }
+    a { color: var(--navy); }
+    .layout { display: grid; grid-template-columns: 16rem 1fr; min-height: 100vh; }
+    nav { position: sticky; top: 0; align-self: start; height: 100vh; overflow: auto; padding: 1.25rem 1rem; background: var(--navy); color: #f5f4ef; }
+    nav a { color: #f5f4ef; text-decoration: none; display: block; padding: 0.28rem 0; font-size: 0.92rem; }
+    nav strong { display: block; letter-spacing: 0.14em; font-size: 0.78rem; margin-bottom: 0.8rem; }
+    main { padding: 2.5rem 8vw 4rem; max-width: 52rem; }
+    h1 { font-size: 2.6rem; line-height: 1; letter-spacing: -0.04em; margin: 0 0 0.4rem; }
+    h2 { margin-top: 2.4rem; font-size: 1.7rem; letter-spacing: -0.03em; }
+    code, pre { font-family: Consolas, monospace; font-size: 0.92rem; }
+    pre { background: white; border: 1px solid var(--line); padding: 0.9rem 1rem; overflow: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 0.45rem 0.4rem 0.45rem 0; vertical-align: top; }
+    .note { background: #e7e3d8; padding: 0.8rem 1rem; }
+    @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } nav { position: relative; height: auto; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav>
+      <strong>VELTRAX 1.0.1</strong>
+      <a href="#introduction">1. Introduction</a>
+      <a href="#requirements">2. Requirements</a>
+      <a href="#installation">3. Installation</a>
+      <a href="#development">4. Local development</a>
+      <a href="#production">5. Production build</a>
+      <a href="#export">6. Static export</a>
+      <a href="#deployment">7. Deployment</a>
+      <a href="#structure">8. Folder structure</a>
+      <a href="#homepages">9. Homepage customization</a>
+      <a href="#colors">10. Theme colors</a>
+      <a href="#type">11. Typography</a>
+      <a href="#navigation">12. Navigation</a>
+      <a href="#content">13. Services and projects</a>
+      <a href="#blog">14. Blog</a>
+      <a href="#tracking">15. Tracking demo</a>
+      <a href="#quote">16. Quote form</a>
+      <a href="#seo">17. SEO</a>
+      <a href="#licensing">18. Asset licensing</a>
+      <a href="#troubleshooting">19. Troubleshooting</a>
+      <a href="#credits">20. Credits</a>
+      <a href="#changelog">21. Changelog</a>
+      <a href="#marketplace">Marketplace notes</a>
+    </nav>
+    <main>
+      <p>Documentation · 26 November 2026</p>
+      <h1>VELTRAX</h1>
+      <p>Logistics and transportation template for Next.js. It builds to a folder of static files.</p>
+
+      <h2 id="introduction">1. Introduction</h2>
+      <p>VELTRAX is a multipage marketing site for a freight, transport, warehousing, and supply chain company. The company in the copy is fictional. Figures, testimonials, staff, and shipments are labeled as demonstration content.</p>
+      <p>Three homepages ship with the template: global logistics at <code>/</code>, freight at <code>/home-freight/</code>, and warehousing at <code>/home-warehousing/</code>.</p>
+      <p>A live preview URL is not included. Deploy the <code>out</code> folder, then add the resulting address to your marketplace listing.</p>
+
+      <h2 id="requirements">2. Requirements</h2>
+      <ul>
+        <li>Node.js 20.9 or newer. This project was built with Node 20.15.</li>
+        <li>npm 10 or newer.</li>
+        <li>A network connection the first time you build, so <code>next/font</code> can download Schibsted Grotesk and Source Sans 3.</li>
+      </ul>
+      <p>You do not need a database, an API key, or a Node server in production.</p>
+
+      <h2 id="installation">3. Installation</h2>
+      <pre>npm install
+copy .env.example .env.local</pre>
+      <p>On macOS or Linux, use <code>cp .env.example .env.local</code>. Set <code>NEXT_PUBLIC_SITE_URL</code> to the public address of the site, with no trailing slash. That value is written into canonical links, Open Graph URLs, <code>sitemap.xml</code>, and <code>robots.txt</code> at build time.</p>
+
+      <h2 id="development">4. Local development</h2>
+      <pre>npm run dev</pre>
+      <p>The dev server prints a local URL, usually <code>http://localhost:3000</code>. Edits to React components and data files refresh in the browser. The quote form and tracker behave the same way they will after export: nothing is sent to a server.</p>
+
+      <h2 id="production">5. Production build</h2>
+      <pre>npm run build</pre>
+      <p>The command typechecks the project and writes a static site. It does not start a server. <code>npm start</code> is not the hosting command for this template, because <code>output: "export"</code> does not produce a Node server bundle.</p>
+      <p>Optional checks before you pack a release:</p>
+      <pre>npm run lint
+npm run typecheck</pre>
+
+      <h2 id="export">6. Static export</h2>
+      <p><code>next.config.ts</code> sets <code>output: "export"</code>, <code>trailingSlash: true</code>, and <code>images.unoptimized: true</code>. The default image optimizer needs a server, so it is turned off. Dynamic routes set <code>dynamicParams = false</code> and <code>generateStaticParams</code>, which is required for export.</p>
+      <p>After a successful build, <code>out/</code> contains one <code>index.html</code> per route, plus <code>404.html</code>, <code>sitemap.xml</code>, <code>robots.txt</code>, images, and JavaScript.</p>
+      <p>Do not add Server Actions, middleware, cookies, or a route handler that reads the request. Those features are incompatible with this export.</p>
+
+      <h2 id="deployment">7. Deployment</h2>
+      <p>Upload the contents of <code>out/</code> to any static host: Netlify, Cloudflare Pages, Amazon S3, GitHub Pages, or a classic Apache or nginx directory. The home page is <code>index.html</code>. Inner pages are folders with their own <code>index.html</code> because trailing slashes are enabled.</p>
+      <p>Rebuild after you change <code>NEXT_PUBLIC_SITE_URL</code>. The URL is fixed at build time.</p>
+      <p class="note">No preview URL is supplied with the download. Put your deployed address in the marketplace listing yourself. Approval is not guaranteed by this documentation.</p>
+
+      <h2 id="structure">8. Folder structure</h2>
+      <table>
+        <tr><th>Path</th><th>Role</th></tr>
+        <tr><td><code>src/app</code></td><td>Routes, metadata, sitemap, robots, global CSS entry</td></tr>
+        <tr><td><code>src/components</code></td><td>Header, footer, forms, homepage sections</td></tr>
+        <tr><td><code>src/data</code></td><td>All editable content</td></tr>
+        <tr><td><code>src/styles/theme.css</code></td><td>Color, type, and layout</td></tr>
+        <tr><td><code>src/lib/seo.ts</code></td><td>Canonical and social metadata helper</td></tr>
+        <tr><td><code>public/images</code></td><td>Demonstration photographs</td></tr>
+        <tr><td><code>documentation</code></td><td>This file</td></tr>
+      </table>
+
+      <h2 id="homepages">9. Homepage customization</h2>
+      <p>Home 01 is <code>src/components/sections/HomeGlobal.tsx</code>, mounted by <code>src/app/page.tsx</code>. Home 02 is <code>HomeFreight.tsx</code> and <code>FreightHero.tsx</code>. Home 03 is <code>HomeWarehouse.tsx</code>. The footer lists all three so a reviewer can find them.</p>
+      <p>Shared facts, including the sample metrics and the five-step sequence, live in <code>src/data/company.ts</code>. Change those before you rewrite the JSX. To make a different homepage the root URL, move the component into <code>src/app/page.tsx</code> and point the old one at another route.</p>
+
+      <h2 id="colors">10. Theme color customization</h2>
+      <p>Colors are CSS variables at the top of <code>src/styles/theme.css</code>.</p>
+      <ul>
+        <li><code>--navy</code> #101D29, structure and primary buttons</li>
+        <li><code>--paper</code> #F5F4EF, page background</li>
+        <li><code>--signal</code> #F46B38, rules and the orange button fill</li>
+        <li><code>--signal-ink</code> a darker orange for small text, so contrast stays readable</li>
+        <li><code>--ink</code> and <code>--muted</code> for body and secondary text</li>
+        <li><code>--line</code> for hairline dividers</li>
+      </ul>
+      <p>Change the variables. Do not hunt for hex values in components. Orange text uses <code>--signal-ink</code> because the brighter brand orange fails normal-text contrast on the paper background.</p>
+
+      <h2 id="type">11. Typography customization</h2>
+      <p>Fonts are loaded in <code>src/app/layout.tsx</code> with <code>next/font/google</code>. Schibsted Grotesk is the display face. Source Sans 3 is the body face. Both are SIL Open Font License and are self-hosted in the export.</p>
+      <p>To switch fonts, replace the two <code>next/font</code> calls and keep the CSS variables <code>--font-display-family</code> and <code>--font-body-family</code>. Headline sizes are in <code>theme.css</code> under <code>.hero-a h1</code>, <code>.section-head h2</code>, and <code>.page-hero h1</code>.</p>
+
+      <h2 id="navigation">12. Navigation customization</h2>
+      <p><code>src/data/navigation.ts</code> builds the header, the services menu, and the footer from the service list plus the company links. Add a page by creating a route under <code>src/app</code> and adding its label and href here. The services mega menu updates when you add a service in <code>services.ts</code>.</p>
+      <p>The mobile drawer reads the same data. Keep link text short enough for a 320px screen.</p>
+
+      <h2 id="content">13. Service and project editing</h2>
+      <p>Services: <code>src/data/services.ts</code>. The slug becomes the URL <code>/services/[slug]/</code>. Each service needs a name, summary, narrative, capabilities, and an image from <code>src/data/images.ts</code>.</p>
+      <p>Industries: <code>src/data/industries.ts</code>. Point <code>serviceSlugs</code> and <code>projectSlug</code> at existing entries.</p>
+      <p>Projects: <code>src/data/projects.ts</code>. The listing page filters by the text before <code>·</code> in <code>sector</code>.</p>
+      <p>After adding or removing a slug, run <code>npm run build</code> so the static page is generated. Unknown slugs are not rendered on demand.</p>
+
+      <h2 id="blog">14. Blog editing</h2>
+      <p>Articles live in <code>src/data/articles.ts</code>. A category string is enough to appear in the filter. The listing shows four articles per page and paginates in the browser. Related articles on a detail page prefer the same category.</p>
+      <p>Write real dates as readable strings, the way the sample articles do. Do not use placeholder Latin.</p>
+
+      <h2 id="tracking">15. Tracking demo customization</h2>
+      <p>Sample shipments are in <code>src/data/shipments.ts</code>. The page accepts IDs shaped like <code>VLX-00000-ABC</code>. These three resolve:</p>
+      <ul>
+        <li><code>VLX-24081-HAM</code> ocean, on the water</li>
+        <li><code>VLX-24092-SIN</code> air, held for a document</li>
+        <li><code>VLX-24105-ORD</code> road, out for delivery</li>
+      </ul>
+      <p>Any other well-formed ID shows the not-found state. The component is <code>src/components/forms/TrackPanel.tsx</code>.</p>
+      <p>To connect a provider, replace <code>findShipment</code> with a call that returns the same <code>Shipment</code> shape: id, status, progress from 0 to 100, origin, destination, and milestones marked complete, current, or upcoming. A static export cannot hide an API key or call a provider during the request. Use a client-side call to your own public endpoint, or regenerate the dataset at build time from a file you control. Do not ship a secret in the browser bundle.</p>
+
+      <h2 id="quote">16. Quote form integration</h2>
+      <p><code>src/components/forms/QuoteForm.tsx</code> checks name, email, phone, company, freight type, origin, destination, weight, optional dimensions, and message. On success it states that nothing was sent. The contact form in <code>ContactForm.tsx</code> works the same way.</p>
+      <p>For production, post the values from the submit handler to a service you operate:</p>
+      <ul>
+        <li>A form endpoint such as Formspree, Getform, or your own serverless function on a different host</li>
+        <li>An email API called from that endpoint, not from this static site with a secret key</li>
+        <li>A CRM create-lead request, again from a server you control</li>
+      </ul>
+      <p>Keep the validation. Remove the sentence that says the message stayed in the browser once a real delivery exists. The contact page can pass <code>?topic=Careers</code> from the sample job listings.</p>
+
+      <h2 id="seo">17. SEO customization</h2>
+      <p>Each page calls <code>createPageMetadata</code> in <code>src/lib/seo.ts</code> with a title, description, path, and optional image. The root layout adds the title template <code>%s — VELTRAX</code>, Open Graph defaults, and an Organization JSON-LD block. Service pages add Service schema. The FAQ page adds FAQPage schema. Articles add Article schema.</p>
+      <p><code>src/app/sitemap.ts</code> and <code>src/app/robots.ts</code> emit <code>sitemap.xml</code> and <code>robots.txt</code> during the export. Change the public URL in the environment, not inside those files.</p>
+
+      <h2 id="licensing">18. Asset licensing</h2>
+      <p>Read <code>ASSET_LICENSES.md</code> before you package a sale. The photographs were generated for this template. They are not stock photos, and they are not images from the design references. If your marketplace account restricts synthetic images, replace the files in <code>public/images</code> and the alt text in <code>src/data/images.ts</code>.</p>
+      <p>Fonts are SIL Open Font License. Lucide icons are ISC. No third-party customer logos are included.</p>
+
+      <h2 id="troubleshooting">19. Troubleshooting</h2>
+      <table>
+        <tr><th>Symptom</th><th>What to do</th></tr>
+        <tr><td>Build asks for Google fonts and fails offline</td><td>Build once online, or vendor the font files and switch <code>next/font/google</code> to <code>next/font/local</code>.</td></tr>
+        <tr><td><code>npm start</code> refuses to run</td><td>Expected. Serve the <code>out</code> folder with your host or any static server.</td></tr>
+        <tr><td>A new slug 404s</td><td>Run <code>npm run build</code> again. Export does not create routes at request time.</td></tr>
+        <tr><td>Canonical URL is example.com</td><td>Set <code>NEXT_PUBLIC_SITE_URL</code> and rebuild.</td></tr>
+        <tr><td>Images look soft</td><td>The export disables the Next image optimizer. Compress replacements yourself before adding them.</td></tr>
+        <tr><td>Menu or motion feels wrong</td><td>The site respects <code>prefers-reduced-motion</code>. Check the operating system setting.</td></tr>
+      </table>
+
+      <h2 id="credits">20. Credits and dependencies</h2>
+      <ul>
+        <li>Next.js 16.4.6, React 19.3, TypeScript</li>
+        <li>Tailwind CSS 4.3, used as the base layer. Layout rules live in <code>theme.css</code>.</li>
+        <li>GSAP and Lenis for optional scroll motion on the home pages (respects <code>prefers-reduced-motion</code>)</li>
+        <li>ESLint with eslint-config-next</li>
+        <li>lucide-react for a small set of interface icons</li>
+        <li>Schibsted Grotesk and Source Sans 3 via next/font</li>
+      </ul>
+      <p>Framer Motion is not included. Design references that could be viewed are recorded in <code>DESIGN_RESEARCH.md</code>. Nothing from those pages was copied into the template.</p>
+      <p>An optional SupportPRO Black Friday campaign lives at <code>/black-friday/</code>. It uses local images, is noindexed, and renders without the main header and footer.</p>
+
+      <h2 id="changelog">21. Changelog</h2>
+      <p><strong>1.0.1 — 26 November 2026</strong></p>
+      <ul>
+        <li>Production polish pass for ThemeForest JAMstack: design tokens, focus/hover consistency, tablet grids, form focus rings.</li>
+        <li>Bare campaign shell for <code>/black-friday/</code>, local campaign imagery, stronger SEO metadata, documentation refresh.</li>
+        <li>Shorter cinematic inner-page heroes, header active/hover nav states, and reusable spacing utilities.</li>
+        <li>Section-specific GSAP ScrollTrigger choreography, motion tokens, magnetic CTA, process path draw, Playwright motion smoke (<code>npm run test:motion</code>).</li>
+      </ul>
+      <p><strong>1.0.0 — 19 November 2026</strong></p>
+      <ul>
+        <li>Initial release.</li>
+        <li>Three homepages, company pages, seven services, six industries, four studies, six articles, quote form, tracking demo, and 404.</li>
+        <li>Static export, sitemap, robots, and this documentation.</li>
+      </ul>
+
+      <h2 id="marketplace">Marketplace notes</h2>
+      <p><strong>Suggested title.</strong> VELTRAX — Logistics &amp; Transportation Next.js Template</p>
+      <p><strong>Suggested description.</strong> VELTRAX is a statically exported Next.js site for a freight forwarder, carrier, or warehouse operator. It includes three distinct homepages, service and industry pages, case studies, a journal, a validated quote form, and a shipment tracker backed by a local demo dataset. The design is editorial and industrial: paper, navy, and a signal orange used sparingly. Copy, staff, testimonials, and metrics are sample content and are labeled that way. Deploy the <code>out</code> folder to any static host. ThemeForest approval is not guaranteed.</p>
+      <p><strong>Tags.</strong> logistics, transportation, freight, shipping, warehouse, supply chain, nextjs, react, business, corporate</p>
+      <p><strong>Implemented features.</strong></p>
+      <ul>
+        <li>Next.js 16 App Router, TypeScript strict, Tailwind CSS 4, static export</li>
+        <li>Homepages for global logistics, freight, and warehousing</li>
+        <li>About, team, careers, FAQ, contact, 404</li>
+        <li>Seven service pages and an overview</li>
+        <li>Six industry pages and an overview</li>
+        <li>Four case studies and six articles, with filters and article pagination</li>
+        <li>Quote and contact forms with validation and an explicit demo success state</li>
+        <li>Tracking lookup with timeline, progress, empty state, and not-found state</li>
+        <li>Sticky header, services mega menu, company menu, mobile drawer, keyboard close</li>
+        <li>Unique titles, descriptions, canonical URLs, Open Graph, Twitter cards, JSON-LD, sitemap, robots</li>
+        <li>Reduced-motion handling, skip link, labeled forms</li>
+      </ul>
+      <p><strong>Demo-only.</strong> Quote submission, contact submission, tracking records, staff, testimonials, office address, and homepage figures.</p>
+      <p><strong>Release checklist.</strong></p>
+      <ul>
+        <li>Replace <code>NEXT_PUBLIC_SITE_URL</code> and rebuild</li>
+        <li>Replace contact details in <code>src/data/site.ts</code></li>
+        <li>Replace or confirm photography under the current marketplace image rules</li>
+        <li>Remove sample staff names and testimonials if you will present the preview as your company</li>
+        <li>Run <code>npm run lint</code>, <code>npm run typecheck</code>, and <code>npm run build</code></li>
+        <li>Open <code>out/index.html</code> and click through services, a study, an article, the quote form, and a sample tracking number</li>
+        <li>Zip the source without <code>node_modules</code>, <code>.next</code>, and <code>out</code>, and include <code>documentation/index.html</code></li>
+        <li>Do not invent a preview URL in the listing</li>
+      </ul>
+      <p><strong>Zip structure.</strong></p>
+      <pre>veltrax/
+  package.json
+  package-lock.json
+  next.config.ts
+  tsconfig.json
+  README.md
+  DESIGN_RESEARCH.md
+  ASSET_LICENSES.md
+  .env.example
+  documentation/index.html
+  public/
+  src/</pre>
+    </main>
+  </div>
+</body>
+</html>
